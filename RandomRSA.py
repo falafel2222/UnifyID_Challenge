@@ -9,7 +9,7 @@ print r.get_quota()
 
 # 2 * 500  ~= 1,000 bits
 
-# I'm aware this was discouraged, but I had a lot of extra time
+# I'm aware this method was discouraged, but I had a lot of extra time
 # and wasn't sure how to generate such a pair without building
 # the framework to check primality and such
 
@@ -74,8 +74,12 @@ def isPrime(n):
 	return fermatPrimalityTest(n)
 
 
-def genPrime(bound1, bound2):
-	p = r.randrange(bound1, bound2)
+def genPrime(numBits):
+	# there's a frustrating issue where the python wrapper
+	# won't allow int beyond what a c long can support, so 64 bits
+	# is the maximum
+	bitList = r.randrange(0, 2, amount = numBits)
+	p = sum([2**i*bitList[i] for i in range(len(bitList))])
 	if p % 2 == 0:
 		p += 1
 
@@ -90,13 +94,13 @@ def genPrime(bound1, bound2):
 
 
 def genRSA():
-	p = genPrime(2**512, 2**513)
-	q = genPrime(2**512, 2**513)
+	p = genPrime(512)
+	q = genPrime(512)
 	n = p * q
 	totient = n / gcd(p,q)
 	e = totient
 	while totient % e == 0:
-		e = genPrime(2, 2**100)
+		e = genPrime(100)
 	d = modinv(e, n)
 
 	print "public N:", n
