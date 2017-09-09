@@ -1,11 +1,11 @@
-# import randomdotorg
+import randomdotorg
 import random
 import math
 from fractions import gcd
 
 
-# r = randomdotorg.RandomDotOrg('UnifyID')
-# print r.get_quota()
+r = randomdotorg.RandomDotOrg('UnifyID')
+print r.get_quota()
 
 # 2 * 500  ~= 1,000 bits
 
@@ -75,7 +75,7 @@ def isPrime(n):
 
 
 def genPrime(bound1, bound2):
-	p = random.randrange(bound1, bound2)
+	p = r.randrange(bound1, bound2)
 	if p % 2 == 0:
 		p += 1
 
@@ -96,8 +96,8 @@ def genRSA():
 	totient = n / gcd(p,q)
 	e = totient
 	while totient % e == 0:
-		e = genPrime(2, totient)
-	d = modinv(e)
+		e = genPrime(2, 2**100)
+	d = modinv(e, n)
 
 	print "public N:", n
 	print "public e:", e

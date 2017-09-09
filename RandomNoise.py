@@ -1,12 +1,11 @@
-# import randomdotorg
-import random
+import randomdotorg
 import wave
 import struct
 
-# r = randomdotorg.RandomDotOrg('UnifyID')
-# print r.get_quota()
+r = randomdotorg.RandomDotOrg('UnifyID')
+print r.get_quota()
 
-# 8kHz * 16bit * 3 = ~= 400,000 bits
+# 8kHz * 8bit * 3 = ~= 200,000 bits
 
 framerate = 8000
 numFrames = 3 * framerate
@@ -19,9 +18,12 @@ outfile.setsampwidth(1)
 outfile.setframerate(framerate)
 outfile.setnframes(numFrames)
 
-for i in range(numFrames):
-	data = random.randrange(0, 2**8)
-	outfile.writeframesraw(struct.pack('<B', data))
+
+data = []
+for i in range(numFrames/200):
+	data += r.randrange(0, 2**8, amount=200)
+for datum in data:
+	outfile.writeframesraw(struct.pack('<B', datum))
 
 outfile.writeframes('')
 outfile.close()
